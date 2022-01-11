@@ -12,7 +12,7 @@ import {
 } from 'urql';
 import Header from './components/Header';
 import Wrapper from './components/Wrapper';
-import NowWhat from './components/NowWhat';
+import MetricDashboard from './components/MetricDashboard';
 
 const subscriptionClient = new SubscriptionClient(
   'wss://react.eogresources.com/graphql',
@@ -23,7 +23,7 @@ const subscriptionClient = new SubscriptionClient(
 );
 
 const client = createClient({
-  url: '/graphql',
+  url: 'https://react.eogresources.com/graphql',
   exchanges: [
     ...defaultExchanges,
     subscriptionExchange({
@@ -52,7 +52,7 @@ const App = () => (
     <Wrapper>
       <Header />
       <UrqlProvider value={client}>
-        <NowWhat />
+        <MetricDashboard />
       </UrqlProvider>
       <ToastContainer />
     </Wrapper>
