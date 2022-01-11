@@ -3,9 +3,34 @@ import { ToastContainer } from 'react-toastify';
 import { MuiThemeProvider, createTheme } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import 'react-toastify/dist/ReactToastify.css';
+import { SubscriptionClient } from 'subscriptions-transport-ws';
+import {
+  Provider as UrqlProvider,
+  createClient,
+  defaultExchanges,
+  subscriptionExchange,
+} from 'urql';
 import Header from './components/Header';
 import Wrapper from './components/Wrapper';
 import NowWhat from './components/NowWhat';
+
+const subscriptionClient = new SubscriptionClient(
+  'wss://react.eogresources.com/graphql',
+  {
+    reconnect: true,
+    timeout: 20000,
+  },
+);
+
+const client = createClient({
+  url: '/graphql',
+  exchanges: [
+    ...defaultExchanges,
+    subscriptionExchange({
+      forwardSubscription: operation => subscriptionClient.request(operation),
+    }),
+  ],
+});
 
 const theme = createTheme({
   palette: {
@@ -26,7 +51,9 @@ const App = () => (
     <CssBaseline />
     <Wrapper>
       <Header />
-      <NowWhat />
+      <UrqlProvider value={client}>
+        <NowWhat />
+      </UrqlProvider>
       <ToastContainer />
     </Wrapper>
   </MuiThemeProvider>
