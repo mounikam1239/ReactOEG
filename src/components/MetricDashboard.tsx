@@ -1,5 +1,3 @@
-/* eslint-disable react/no-array-index-key */
-/* eslint-disable max-len */
 /* eslint-disable no-else-return */
 /* eslint-disable react/jsx-wrap-multilines */
 /* eslint-disable operator-linebreak */
@@ -41,7 +39,7 @@ const useStyles = makeStyles({
 const Dashboard = () => {
     const classes = useStyles();
     const dispatch = useDispatch();
-    const setMetrics = (metrics: any) => dispatch(addMetrics(metrics));
+    const setMetrics = (metrics: string[]) => dispatch(addMetrics(metrics));
     const metrics = useSelector(
         (state: RootState) => state.metrics.value,
     );
@@ -51,8 +49,8 @@ const Dashboard = () => {
             <MetricSubscription />
             <div className={classes.header}>
                 <div className={classes.metrics}>
-                    {metrics.map((m, i) => (
-                        <Metric metric={m} key={i} />
+                    {metrics.map((m) => (
+                        <Metric metric={m} key={m} />
                     ))}
                 </div>
                 <div className={classes.selection}>
