@@ -1,5 +1,4 @@
-/* eslint-disable react/jsx-closing-bracket-location */
-/* eslint-disable @typescript-eslint/no-use-before-define */
+/* eslint-disable max-len */
 /* eslint-disable no-else-return */
 /* eslint-disable react/jsx-wrap-multilines */
 /* eslint-disable operator-linebreak */
@@ -10,59 +9,33 @@
 /* eslint-disable react/jsx-indent */
 /* eslint-disable @typescript-eslint/semi */
 import React from 'react';
-import { Query } from 'urql';
-import Select from 'react-select';
-import makeAnimated from 'react-select/animated';
+import Card from '@material-ui/core/Card';
+import Typography from '@material-ui/core/Typography';
+import CardContent from '@material-ui/core/CardContent';
+import { makeStyles } from '@material-ui/core/styles';
+// import { useSelector } from 'react-redux';
 
-const query = 'query {getMetrics}';
+const useStyles = makeStyles({
+    card: {
+        width: '40%',
+        marginRight: '1rem',
+        marginBottom: '1rem',
+    },
+});
 
-const animatedComponents = makeAnimated();
-
-interface Metrics {
-    getMetrics: string[]
-}
-
-interface Metric {
-    fetching: boolean;
-    data?: Metrics | undefined;
-    error?: object | undefined;
-}
-
-export default (props: any) => {
-    const { setMetrics } = props;
-    const onChange = (metrics: any) => {
-        setMetrics((metrics || []).map(({ value }: { value: string }) => value));
-    };
-
-    const queryFunction = () => {
-        return ({ fetching, data, error }: Metric) => {
-            if (fetching) {
-                return <div>Loading...</div>;
-            } else if (error) {
-                return <div>Error </div>;
-            } else if (!data) {
-                return <div>NO Record found</div>;
-            }
-
-            const metrics = data.getMetrics.map((metric: string) => ({
-                value: metric,
-                label: metric,
-            }));
-
-            return (
-                <Select
-                    closeMenuOnSelect={false}
-                    components={animatedComponents}
-                    isMulti
-                    onChange={onChange}
-                    options={metrics} />
-            );
-        };
-    }
+export default ({ metric }: { metric: string }) => {
+    const classes = useStyles();
+    // const getLastKnownMeasurement = useMemo(
+    //     Packs.measurements.selectors.makeNumOfTodosWithIsDoneSelector
+    // );
+    // const value = useSelector(state => getLastKnownMeasurement(state, metric));
 
     return (
-        <Query query={query}>
-            {queryFunction()}
-        </Query>
+        <Card className={classes.card}>
+            <CardContent>
+                <Typography variant="h6">{metric}</Typography>
+                {/* <Typography variant="h3">{value}</Typography> */}
+            </CardContent>
+        </Card>
     );
 };

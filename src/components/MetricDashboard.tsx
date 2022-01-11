@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 /* eslint-disable max-len */
 /* eslint-disable no-else-return */
 /* eslint-disable react/jsx-wrap-multilines */
@@ -14,6 +15,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import MetricSelect from './MetricSelect';
 import { addMetrics } from '../feature/metricSlice';
 import { RootState } from '../app/store';
+import Metric from './Metric';
+import MetricChart from './MetricChart';
 
 const useStyles = makeStyles({
     wrapper: {
@@ -41,15 +44,19 @@ const Dashboard = () => {
         (state: RootState) => state.metrics.value,
     );
 
-    console.log('metrics: ', metrics)
-
     return (
         <div className={classes.wrapper}>
             <div className={classes.header}>
+                <div className={classes.metrics}>
+                    {metrics.map((m, i) => (
+                        <Metric metric={m} key={i} />
+                    ))}
+                </div>
                 <div className={classes.selection}>
                     <MetricSelect setMetrics={setMetrics} />
                 </div>
             </div>
+            <MetricChart />
         </div>
     );
 };
