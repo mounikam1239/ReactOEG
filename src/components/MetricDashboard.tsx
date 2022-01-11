@@ -16,11 +16,13 @@ import MetricSelect from './MetricSelect';
 import { addMetrics } from '../feature/metricSlice';
 import { RootState } from '../app/store';
 import Metric from './Metric';
+import MetricSubscription from './MetricSubscription';
 import MetricChart from './MetricChart';
 
 const useStyles = makeStyles({
     wrapper: {
         height: '100vh',
+        margin: 15,
     },
     header: {
         display: 'flex',
@@ -46,6 +48,7 @@ const Dashboard = () => {
 
     return (
         <div className={classes.wrapper}>
+            <MetricSubscription />
             <div className={classes.header}>
                 <div className={classes.metrics}>
                     {metrics.map((m, i) => (

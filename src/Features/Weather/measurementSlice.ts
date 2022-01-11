@@ -32,14 +32,14 @@ export const measurementSlice = createSlice({
         addMeasurement: (state, action: PayloadAction<MultipleMeasurement[]>) => {
             state.value = action.payload;
         },
-        newMeasurementsDataReceived: (state, action: any) => {
+        getSubscriptionMeasurement: (state, action: any) => {
             if (state.value.length > 0) {
                 for (let i = 0; i < Object.keys(state.value).length; i += 1) {
                     if (
                         state.value[i].metric
-                        === action.newMeasurementData.newMeasurement.metric
+                        === action.payload.metric
                     ) {
-                        state.value[i].measurements.push(action.newMeasurementData.newMeasurement);
+                        state.value[i].measurements.push(action.payload);
                         state.value[i].measurements.shift()
                     }
                 }
@@ -48,6 +48,6 @@ export const measurementSlice = createSlice({
     },
 });
 
-export const { addMeasurement, newMeasurementsDataReceived } = measurementSlice.actions;
+export const { addMeasurement, getSubscriptionMeasurement } = measurementSlice.actions;
 
 export default measurementSlice.reducer;
