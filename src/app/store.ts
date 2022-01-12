@@ -9,10 +9,10 @@ import metricSliceReducer from '../feature/metricSlice';
 import measurementReducer from '../feature/measurementSlice';
 
 export const store = configureStore({
-    reducer: {
-        metrics: metricSliceReducer,
-        measurements: measurementReducer,
-    },
+  reducer: {
+    metrics: metricSliceReducer,
+    measurements: measurementReducer,
+  },
 });
 
 export type RootState = ReturnType<typeof store.getState>;

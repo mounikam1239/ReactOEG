@@ -1,41 +1,60 @@
-/* eslint-disable max-len */
-/* eslint-disable no-else-return */
-/* eslint-disable react/jsx-wrap-multilines */
-/* eslint-disable operator-linebreak */
-/* eslint-disable react/jsx-props-no-spreading */
+/* eslint-disable react/jsx-closing-bracket-location */
 /* eslint-disable react/jsx-indent-props */
 /* eslint-disable @typescript-eslint/indent */
-/* eslint-disable arrow-body-style */
 /* eslint-disable react/jsx-indent */
-/* eslint-disable @typescript-eslint/semi */
 import React from 'react';
-import Card from '@material-ui/core/Card';
-import Typography from '@material-ui/core/Typography';
-import CardContent from '@material-ui/core/CardContent';
-import { makeStyles } from '@material-ui/core/styles';
-// import { useSelector } from 'react-redux';
+import { Query } from 'urql';
+import Select from 'react-select';
+import makeAnimated from 'react-select/animated';
 
-const useStyles = makeStyles({
-    card: {
-        width: '40%',
-        marginRight: '1rem',
-        marginBottom: '1rem',
-    },
-});
+const query = 'query {getMetrics}';
 
-export default ({ metric }: { metric: string }) => {
-    const classes = useStyles();
-    // const getLastKnownMeasurement = useMemo(
-    //     Packs.measurements.selectors.makeNumOfTodosWithIsDoneSelector
-    // );
-    // const value = useSelector(state => getLastKnownMeasurement(state, metric));
+const animatedComponents = makeAnimated();
+
+interface Metrics {
+    getMetrics: string[]
+}
+
+interface Metric {
+    fetching: boolean;
+    data?: Metrics | undefined;
+    error?: object | undefined;
+}
+
+export default ({ setMetrics }: { setMetrics: (arg: string[]) => {} }) => {
+    const onChange = (metrics: any) => {
+        setMetrics((metrics || []).map(({ value }: { value: string }) => value));
+    };
+
+    const queryFunction = () => ({ fetching, data, error }: Metric) => {
+        if (fetching) {
+            return <div>Loading...</div>;
+        }
+        if (error) {
+            return <div>Error </div>;
+        }
+        if (!data) {
+            return <div>NO Record found</div>;
+        }
+
+        const metrics = data.getMetrics.map((metric: string) => ({
+            value: metric,
+            label: metric,
+        }));
+
+        return (
+            <Select
+                closeMenuOnSelect={false}
+                components={animatedComponents}
+                isMulti
+                onChange={onChange}
+                options={metrics} />
+        );
+    };
 
     return (
-        <Card className={classes.card}>
-            <CardContent>
-                <Typography variant="h6">{metric}</Typography>
-                {/* <Typography variant="h3">{value}</Typography> */}
-            </CardContent>
-        </Card>
+        <Query query={query}>
+            {queryFunction()}
+        </Query>
     );
 };
